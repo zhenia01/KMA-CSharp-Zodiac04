@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using BorodaikevychZodiac.Entities;
 using BorodaikevychZodiac.Exceptions;
@@ -36,6 +37,7 @@ namespace BorodaikevychZodiac.Models.User
       });
     }
 
+
     public string FirstName
     {
       get => _person.FirstName;
@@ -54,10 +56,9 @@ namespace BorodaikevychZodiac.Models.User
       set => _person.Email = value;
     }
 
-    public bool IsBornToday => _person.IsBornToday;
-    public bool IsAdult => _person.IsAdult;
-
-    public (string name, string emoji) ChineseZodiacSign => _person.ChineseZodiacSign;
-    public (string name, string emoji) WesternZodiacSign => _person.WesternZodiacSign;
+    [JsonIgnore] public bool IsBornToday => _person.IsBornToday;
+    [JsonIgnore] public bool IsAdult => _person.IsAdult;
+    [JsonIgnore] public (string name, string emoji) ChineseZodiacSign => _person.ChineseZodiacSign;
+    [JsonIgnore] public (string name, string emoji) WesternZodiacSign => _person.WesternZodiacSign;
   }
 }
