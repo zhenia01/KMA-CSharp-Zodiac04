@@ -7,7 +7,7 @@ using BorodaikevychZodiac.Exceptions;
 
 namespace BorodaikevychZodiac.Models.User
 {
-  internal class UserModel
+  public class UserModel
   {
     private readonly Person _person = new Person();
 
@@ -36,7 +36,6 @@ namespace BorodaikevychZodiac.Models.User
         return result;
       });
     }
-
 
     public string FirstName
     {

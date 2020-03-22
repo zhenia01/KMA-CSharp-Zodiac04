@@ -7,6 +7,20 @@ namespace BorodaikevychZodiac.Entities
 {
   public class Person
   {
+    public Person(string firstName, string lastName, string email, DateTime birthDate = default)
+    {
+      FirstName = firstName;
+      LastName = lastName;
+      Email = email;
+      SetBirthDateAsync(birthDate).Wait();
+    }
+
+    public Person(string firstName, string lastName, DateTime birthDate) : this(firstName, lastName, "", birthDate)
+    {
+    }
+
+    public Person(){}
+
     public string FirstName { get; set; }
     public string LastName { get; set; } 
 

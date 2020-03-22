@@ -5,7 +5,6 @@
 }
 
 <div>
-
   <h1 class="text-center display-1">Person</h1>
   <div class="form-group mb-4">
     <form asp-antiforgery="true" id="birthDateForm" method="post">
@@ -69,4 +68,5 @@
     }
   }
 
+  <partial name="PersonListPartial" model="Model.PersonList"/>
 </div>
