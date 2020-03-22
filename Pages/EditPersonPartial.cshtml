@@ -1,0 +1,81 @@
+﻿@model EditPersonPartialModel
+
+<div class="modal fade" id="editPersonModal" tabindex="-1" role="dialog" aria-labelledby="editPersonModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editPersonModalLabel">Edit Person's info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group mb-4">
+          <form asp-antiforgery="true" id="birthDateForm" method="post">
+            <div class="form-group">
+              <label asp-for="@Model.BirthDate">Birth Date</label>
+              <input asp-for="@Model.BirthDate" placeholder="dd-mm-yyyy" class="datepicker date form-control py-4 px-4" required>
+            </div>
+            <div class="form-group">
+              <label asp-for="@Model.FirstName">First Name</label>
+              <input asp-for="@Model.FirstName" placeholder="First name" class="form-control py-4 px-4 mb-2" required>
+            </div>
+            <div class="form-group">
+              <label asp-for="@Model.LastName">Last Name</label>
+              <input asp-for="@Model.LastName" placeholder="Last Name" class="form-control py-4 px-4 mb-2" required>
+            </div>
+            <div class="form-group">
+              <label asp-for="@Model.Email">Email address</label>
+              <input asp-for="@Model.Email" placeholder="abc@@company.com" class="form-control py-4 px-4 mb-2" required>
+            </div>
+            @*<div class="input-group-append">
+                <button class="btn btn-block btn-lg btn-outline-secondary align-items-center" type="submit" form="birthDateForm">
+                  Process
+                </button>
+              </div>*@
+          </form>
+        </div>
+        @if (!Model.ModelState.IsValid)
+        {
+          <div class="text-center">
+            @if (Model.ModelState.ContainsKey("Invalid birth date format"))
+            {
+              <p class="alert alert-warning">Error! Type date in "DD-MM-YYYY" format</p>
+            }
+            @if (Model.ModelState.ContainsKey("Early birth date") || Model.ModelState.ContainsKey("Future birth date"))
+            {
+              <p class="alert alert-warning">Error! Type real date</p>
+            }
+            @if (Model.ModelState.ContainsKey("Email"))
+            {
+              <p class="alert alert-warning">Error! Invalid email format</p>
+            }
+          </div>
+        }
+        else
+        {
+          if (Model.Tried)
+          {
+            <div class="text-center">
+              <p class="alert alert-info">Your birth date: @Model.BirthDate</p>
+              <p class="alert alert-info">@(Model.IsAdult ? "You are an adult" : "You are not an adult")</p>
+              @if (Model.IsBornToday)
+              {
+                <p class="alert alert-success">Happy Birthday!!! 🎁🎉</p>
+              }
+              <p class="alert alert-info">Your first name: @Model.FirstName</p>
+              <p class="alert alert-info">Your last name: @Model.LastName</p>
+              <p class="alert alert-info">Your email: @Model.Email</p>
+              <p class="alert alert-info">Your chinese sign: @Model.ChineseZodiacSign.name @Model.ChineseZodiacSign.emoji</p>
+              <p class="alert alert-info">Your western sign: @Model.WesternZodiacSign.name @Model.WesternZodiacSign.emoji</p>
+            </div>
+          }
+        }
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="personSave" class="btn btn-primary" type="submit" form="birthDateForm">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,14 +11,19 @@ namespace BorodaikevychZodiac.Models.User
   {
     private readonly Person _person = new Person();
 
-    public string BirthDate { get; private set; }
+    private string _birthDate;
+    public string BirthDate
+    {
+      get => _birthDate;
+      set => SetBirthDateStringAsync(value).Wait();
+    }
 
     public async Task SetBirthDateStringAsync(string birthDateString)
     {
       var birthDate = await ParseBirthDateAsync(birthDateString);
       if (birthDate != default)
       {
-        BirthDate = birthDateString;
+        _birthDate = birthDateString;
         await _person.SetBirthDateAsync(birthDate);
       }
       else
