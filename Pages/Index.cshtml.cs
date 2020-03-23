@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using BorodaikevychZodiac.Exceptions;
@@ -19,6 +21,32 @@ namespace BorodaikevychZodiac.Pages
     public async Task OnGet()
     {
       await _personList.Initialize();
+    }
+
+    public async Task<IActionResult> OnPostEditPersonAsync(string birthDate, string email)
+    {
+      try
+      {
+        await EditModel.EditAsync(birthDate, email);
+      }
+      catch (TooEarlyBirthDateException e)
+      {
+        ModelState.AddModelError("Early birth date", e.Message);
+      }
+      catch (FutureBirthDateException e)
+      {
+        ModelState.AddModelError("Future birth date", e.Message);
+      }
+      catch (InvalidDateFormatException e)
+      {
+        ModelState.AddModelError("Invalid birth date format", e.Message);
+      }
+      catch (InvalidEmailFormatException e)
+      {
+        ModelState.AddModelError("Email", e.Message);
+      }
+
+      return Partial("_ContactModalPartial", this);
     }
   }
 }

@@ -13,8 +13,18 @@ $(() => {
         todayBtn: "linked"
     });
 
-    //$("#birthDateForm").submit((e) => {
-    //    e.preventDefault();
-    //});
+    const $form = $("#birthDateForm");
+    const $editModal = $("#editPersonModal");
+
+    $form.submit((e) => {
+        e.preventDefault();
+        const dataToSend = $form.serialize();
+        const actionUrl = $form.attr("action");
+
+        $.post(actionUrl, dataToSend).done((data) => {
+            var $newBody = $(".modal-body", data);
+            $editModal.find(".modal-body").replaceWith($newBody);
+        });
+    });
 
 });

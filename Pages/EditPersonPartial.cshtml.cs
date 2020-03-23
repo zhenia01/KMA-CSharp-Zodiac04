@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BorodaikevychZodiac.Pages
 {
-    public class EditPersonPartialModel : PageModel
+    public class EditPersonPartialModel
     {
       private readonly UserModel _user = new UserModel();
 
@@ -38,35 +38,35 @@ namespace BorodaikevychZodiac.Pages
 
       public bool Tried { get; private set; }
 
-      public async Task OnPostAsync(string birthDate, string email)
+      public async Task EditAsync(string birthDate, string email)
       {
         Tried = true;
 
-        try
-        {
+        //try
+        //{
           await _user.SetBirthDateStringAsync(birthDate);
-        }
-        catch (TooEarlyBirthDateException e)
-        {
-          ModelState.AddModelError("Early birth date", e.Message);
-        }
-        catch (FutureBirthDateException e)
-        {
-          ModelState.AddModelError("Future birth date", e.Message);
-        }
-        catch (InvalidDateFormatException e)
-        {
-          ModelState.AddModelError("Invalid birth date format", e.Message);
-        }
+        //}
+        //catch (TooEarlyBirthDateException e)
+        //{
+        //  ModelState.AddModelError("Early birth date", e.Message);
+        //}
+        //catch (FutureBirthDateException e)
+        //{
+        //  ModelState.AddModelError("Future birth date", e.Message);
+        //}
+        //catch (InvalidDateFormatException e)
+        //{
+        //  ModelState.AddModelError("Invalid birth date format", e.Message);
+        //}
 
-        try
-        {
+        //try
+        //{
           _user.Email = email;
-        }
-        catch (InvalidEmailFormatException e)
-        {
-          ModelState.AddModelError("Email", e.Message);
-        }
+        //}
+        //catch (InvalidEmailFormatException e)
+        //{
+        //  ModelState.AddModelError("Email", e.Message);
+        //}
       }
     }
 }
