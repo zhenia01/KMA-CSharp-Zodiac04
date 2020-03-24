@@ -44,9 +44,9 @@ namespace BorodaikevychZodiac.Models
             sb.Append($"{y}");
 
             _list[i].SetBirthDateStringAsync(sb.ToString()).Wait();
-
-            SerializeList().Wait();
           }
+
+          SerializeList().Wait();
         }
       }
     }
