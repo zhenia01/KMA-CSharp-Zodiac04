@@ -2,15 +2,34 @@
 
 $(() => {
     const $editModalPlaceholder = $("#edit-person-modal-placeholder");
+    const $personListPlaceholder = $("#person-list-placeholder");
 
-    $('button[data-toggle="ajax-modal"]').click(function(event) {
-        const url = $(this).data("url");
-        $.get(url).done((data) => {
-            $editModalPlaceholder.empty();
-            $editModalPlaceholder.append(data);
-            $editModalPlaceholder.find(".modal").first().modal("show");
+    $personListPlaceholder.on("click",
+        "button[data-toggle='ajax-modal']",
+        function(e) {
+            const url = $(this).data("url");
+            $.get(url).done((data) => {
+                $editModalPlaceholder.empty();
+                $editModalPlaceholder.append(data);
+                $editModalPlaceholder.find(".modal").first().modal("show");
+                const index = `${$(this).parents("tr").find("#person-index").text()}`;
+                $editModalPlaceholder.find("#person-index").attr("value", index);
+            });
         });
-    });
+
+    $personListPlaceholder.on("click",
+        "button[data-toggle='ajax-delete']",
+        function(e) {
+            const url = $(this).data("url");
+            const index = parseInt(`${$(this).parents("tr").find("#person-index").text()}`);
+
+            $.get(url, { "index": index-1 }).done(() => {
+                $.get("/?handler=PersonList").done((list) => {
+                    $personListPlaceholder.empty();
+                    $personListPlaceholder.append(list);
+                });
+            });
+        });
 
     $editModalPlaceholder.on("click",
         "[data-save='modal']",
@@ -18,15 +37,24 @@ $(() => {
             e.preventDefault();
 
             const $form = $(this).parents(".modal").find("#birthDateForm");
-            var data = $form.serialize();
-            //data += append(`&index=${$(this).parents("#person-index").text()}`);
+            const data = $form.serialize();
             const actionUrl = $form.attr("action");
-
-            $.post(actionUrl, data).done((data) => {
-                var newBody = $(".modal-body", data);
+            $.post(actionUrl, data).done((edited) => {
+                const newBody = $(".modal-body", edited);
                 $editModalPlaceholder.find(".modal-body").replaceWith(newBody);
+
+                const isValid = newBody.find('[name="IsValid"]').val() === "True";
+                if (isValid) {
+                    $editModalPlaceholder.find(".modal").first().modal("hide");
+                }
+
+                $.get("/?handler=PersonList").done((list) => {
+                    $personListPlaceholder.empty();
+                    $personListPlaceholder.append(list);
+                });
             });
         });
+
 
     $editModalPlaceholder.on("focusin",
         "input.datepicker",

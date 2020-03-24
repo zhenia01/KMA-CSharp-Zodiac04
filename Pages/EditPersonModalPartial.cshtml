@@ -37,7 +37,8 @@
         }
         <div class="form-group mb-4">
           <form asp-antiforgery="true" id="birthDateForm" asp-page-handler="EditPersonModalPartial">
-            <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+            <input name="index" type="hidden" id="person-index" />
+            <input name="IsValid" type="hidden" value="@Model.ModelState.IsValid.ToString()" />
             <div class="form-group">
               <label asp-for="BirthDate">Birth Date</label>
               <input asp-for="BirthDate" placeholder="dd-mm-yyyy" class="datepicker date form-control py-4 px-4" required>

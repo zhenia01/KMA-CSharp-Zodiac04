@@ -1,10 +1,13 @@
 ﻿@page
+@using BorodaikevychZodiac.Models
 @model IndexModel
 @{
   ViewData["Title"] = "Zodiac";
 }
 
 <div>
-  <partial name="PersonListPartial" model="Model.PersonList"/>
+  <div id="person-list-placeholder">
+    <partial name="PersonListPartial"/>
+  </div>
   <div id="edit-person-modal-placeholder"></div>
 </div>
