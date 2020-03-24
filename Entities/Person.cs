@@ -43,6 +43,10 @@ namespace BorodaikevychZodiac.Entities
         {
           throw new InvalidEmailFormatException();
         }
+        catch (ArgumentNullException)
+        {
+          throw new InvalidEmailFormatException();
+        }
       }
     }
 

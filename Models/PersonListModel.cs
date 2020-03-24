@@ -11,39 +11,42 @@ namespace BorodaikevychZodiac.Models
   {
     private static List<PersonModel> _list;
 
+    private static readonly string Path =
+      System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Storage", "storage.json");
+
     static PersonListModel()
     {
       try
       {
-        using var fs = File.OpenRead(Path.Combine(Directory.GetCurrentDirectory(), "Storage", "storage.json"));
-        using var sr = new StreamReader(fs);
-        _list = JsonSerializer.Deserialize<List<PersonModel>>(sr.ReadToEnd());
+        using var fs = File.OpenRead(Path);
+        _list = JsonSerializer.Deserialize<List<PersonModel>>(new StreamReader(fs).ReadToEnd());
       }
-      catch (FileNotFoundException)
+      catch (Exception e)
       {
-        _list = new List<PersonModel>();
-        for (int i = 0; i < 50; i++)
+        if (e is FileNotFoundException || e is JsonException)
         {
-          _list.Add(new PersonModel
+          _list = new List<PersonModel>();
+          for (int i = 0; i < 50; i++)
           {
-            Email = $"MyMail{i}@gmail.com", FirstName = $"{(char) ('A' + i % 26)}{(char) ('a' + i % 26)}",
-            LastName = $"{(char) ('Z' - i % 26)}{(char) ('z' - i % 26)}"
-          });
+            _list.Add(new PersonModel
+            {
+              Email = $"MyMail{i}@gmail.com", FirstName = $"{(char) ('A' + i % 26)}{(char) ('a' + i % 26)}",
+              LastName = $"{(char) ('Z' - i % 26)}{(char) ('z' - i % 26)}"
+            });
 
-          int d = i % 28 + 1;
-          int m = i % 12 + 1;
-          int y = 1900 + i;
+            int d = i % 28 + 1;
+            int m = i % 12 + 1;
+            int y = 1900 + i;
 
-          var sb = new StringBuilder();
-          sb.Append(d <= 9 ? $"0{d}-" : $"{d}-");
-          sb.Append(m <= 9 ? $"0{m}-" : $"{m}-");
-          sb.Append($"{y}");
+            var sb = new StringBuilder();
+            sb.Append(d <= 9 ? $"0{d}-" : $"{d}-");
+            sb.Append(m <= 9 ? $"0{m}-" : $"{m}-");
+            sb.Append($"{y}");
 
-          _list[i].SetBirthDateStringAsync(sb.ToString()).Wait();
+            _list[i].SetBirthDateStringAsync(sb.ToString()).Wait();
 
-          using var fs = File.Create(Path.Combine(Directory.GetCurrentDirectory(), "Storage", "storage.json"));
-          using var sw = new StreamWriter(fs);
-          sw.Write(JsonSerializer.Serialize(_list));
+            SerializeList().Wait();
+          }
         }
       }
     }
@@ -52,7 +55,7 @@ namespace BorodaikevychZodiac.Models
 
     public static async Task<PersonModel> GetPerson(int index)
     {
-      await DeserializeList();
+      _list = await DeserializeList();
       return _list[index];
     }
 
@@ -76,14 +79,14 @@ namespace BorodaikevychZodiac.Models
 
     private static async Task SerializeList()
     {
-      await using var fs = File.Create(Path.Combine(Directory.GetCurrentDirectory(), "Storage", "storage.json"));
+      await using var fs = File.Create(Path);
       await JsonSerializer.SerializeAsync(fs, _list);
     }
-    
-    private static async Task DeserializeList()
+
+    private static async Task<List<PersonModel>> DeserializeList()
     {
-      await using var fs = File.OpenRead(Path.Combine(Directory.GetCurrentDirectory(), "Storage", "storage.json"));
-      _list = await JsonSerializer.DeserializeAsync<List<PersonModel>>(fs);
+      await using var fs = File.OpenRead(Path);
+      return await JsonSerializer.DeserializeAsync<List<PersonModel>>(fs);
     }
   }
 }

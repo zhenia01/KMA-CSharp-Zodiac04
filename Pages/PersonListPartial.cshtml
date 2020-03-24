@@ -18,7 +18,7 @@
   <tbody>
   @for (int i = 0; i < PersonListModel.Count; i++)
   {
-    var person = await  PersonListModel.GetPerson(i);
+    var person = await PersonListModel.GetPerson(i);
     <tr>
       <th scope="row" id="person-index">@(i + 1)</th>
       <td>@person.FirstName</td>
@@ -44,10 +44,10 @@
       <td>@person.ChineseZodiacSign.name @person.ChineseZodiacSign.emoji</td>
       <td>@person.WesternZodiacSign.name @person.WesternZodiacSign.emoji</td>
       <td colspan="2">
-        <button type="button" class="btn btn-outline-secondary" data-toggle="ajax-modal" data-url="@Url.Page("Index", "EditPersonModalPartial")">
+        <button type="button" class="btn btn-outline-secondary" data-toggle="edit-person-modal" data-url="@Url.Page("Index", "EditPersonModal")">
           <i class="fas fa-edit"></i>
         </button>
-        <button class="btn btn-outline-secondary" data-toggle="ajax-delete" data-url="@Url.Page("Index", "DeletePerson")">
+        <button class="btn btn-outline-secondary" data-toggle="delete-person-modal" data-url="@Url.Page("Index", "DeletePerson")">
           <i class="fas fa-trash"></i>
         </button>
       </td>
@@ -55,3 +55,4 @@
   }
   </tbody>
 </table>
+<button type="button" class="btn btn-primary btn-block" data-toggle="add-person-modal" data-url="@Url.Page("Index", "AddPersonModal")">Add new person</button>
