@@ -19,12 +19,16 @@ namespace BorodaikevychZodiac.Entities
     {
     }
 
-    public Person(){}
+    public Person()
+    {
+    }
 
     public string FirstName { get; set; }
-    public string LastName { get; set; } 
+
+    public string LastName { get; set; }
 
     private string _email;
+
     public string Email
     {
       get => _email;
@@ -47,13 +51,12 @@ namespace BorodaikevychZodiac.Entities
     public DateTime BirthDate => _birthInfo.BirthDate;
 
     public async Task SetBirthDateAsync(DateTime birthDate)
-      {
-        await _birthInfo.SetBirthDateAsync(birthDate);
-        ChineseZodiacSign = await ZodiacSigns.ChineseSign(_birthInfo.BirthDate);
-        WesternZodiacSign = await ZodiacSigns.WesternSign(_birthInfo.BirthDate);
-        IsAdult = _birthInfo.Age >= 18;
-      }
-    
+    {
+      await _birthInfo.SetBirthDateAsync(birthDate);
+      ChineseZodiacSign = await ZodiacSigns.ChineseSign(_birthInfo.BirthDate);
+      WesternZodiacSign = await ZodiacSigns.WesternSign(_birthInfo.BirthDate);
+      IsAdult = _birthInfo.Age >= 18;
+    }
 
     public bool IsAdult { get; private set; }
     public (string name, string emoji) ChineseZodiacSign { get; private set; }

@@ -1,15 +1,19 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using BorodaikevychZodiac.Entities;
 using BorodaikevychZodiac.Exceptions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace BorodaikevychZodiac.Models.User
+namespace BorodaikevychZodiac.Models
 {
-  public class UserModel
+  public class PersonModel
   {
     private readonly Person _person = new Person();
+
+    public ModelStateDictionary ModelState { get; } = new ModelStateDictionary();
 
     private string _birthDate;
     public string BirthDate

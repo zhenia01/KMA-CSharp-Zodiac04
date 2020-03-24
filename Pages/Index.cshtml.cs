@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BorodaikevychZodiac.Exceptions;
-using BorodaikevychZodiac.Models.PersonList;
-using BorodaikevychZodiac.Models.User;
+using BorodaikevychZodiac.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -14,39 +8,65 @@ namespace BorodaikevychZodiac.Pages
 {
   public class IndexModel : PageModel
   {
-    private readonly PersonListModel _personList = new PersonListModel();
-    public List<UserModel> PersonList => _personList.PersonList;
-    public EditPersonPartialModel EditModel { get; } = new EditPersonPartialModel();
+    public PersonListModel PersonList { get; } = new PersonListModel();
 
-    public async Task OnGet()
+    public async Task<IActionResult> OnGetAsync()
     {
-      await _personList.Initialize();
+      await PersonList.Initialize();
+      return Page();
     }
 
-    public async Task<IActionResult> OnPostEditPersonAsync(string birthDate, string email)
+    public IActionResult OnGetEditPersonModalPartial()
     {
+      return Partial("EditPersonModalPartial", new PersonModel());
+    }
+
+    public async Task<IActionResult> OnPostEditPersonModalPartialAsync(int index, string birthDate, string email, string firstName,
+      string lastName)
+    {
+      var person = new PersonModel();
+
+      if (string.IsNullOrWhiteSpace(firstName))
+      {
+        person.ModelState.AddModelError("FirstName", "First Name can't be empty");
+      }
+
+      person.FirstName = firstName;
+
+      if (string.IsNullOrWhiteSpace(lastName))
+      {
+        person.ModelState.AddModelError("LastName", "Last Name can't be empty");
+      }
+
+      person.LastName = lastName;
+
       try
       {
-        await EditModel.EditAsync(birthDate, email);
-      }
-      catch (TooEarlyBirthDateException e)
-      {
-        ModelState.AddModelError("Early birth date", e.Message);
-      }
-      catch (FutureBirthDateException e)
-      {
-        ModelState.AddModelError("Future birth date", e.Message);
-      }
-      catch (InvalidDateFormatException e)
-      {
-        ModelState.AddModelError("Invalid birth date format", e.Message);
+        person.Email = email;
       }
       catch (InvalidEmailFormatException e)
       {
-        ModelState.AddModelError("Email", e.Message);
+        person.ModelState.AddModelError("Email", e.Message);
       }
 
-      return Partial("_ContactModalPartial", this);
+      try
+      {
+        await person.SetBirthDateStringAsync(birthDate);
+      }
+      catch (TooEarlyBirthDateException e)
+      {
+        person.ModelState.AddModelError("Early birth date", e.Message);
+      }
+      catch (FutureBirthDateException e)
+      {
+        person.ModelState.AddModelError("Future birth date", e.Message);
+      }
+      catch (InvalidDateFormatException e)
+      {
+        person.ModelState.AddModelError("Invalid birth date format", e.Message);
+      }
+
+      return Partial("EditPersonModalPartial", person);
     }
   }
 }

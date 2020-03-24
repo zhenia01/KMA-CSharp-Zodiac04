@@ -1,5 +1,4 @@
-﻿@using BorodaikevychZodiac.Models.User;
-@model List<UserModel>
+﻿@model BorodaikevychZodiac.Models.PersonListModel
 <h1 class="text-center display-1">List of Persons</h1>
 <table class="table table-hover">
   <thead>
@@ -17,11 +16,11 @@
   </tr>
   </thead>
   <tbody>
-  @for (int i = 0; i < Model.Count; i++)
+  @for (int i = 0; i < Model.PersonList.Count; i++)
   {
-    var person = Model[i];
+    var person = Model.PersonList[i];
     <tr>
-      <th scope="row">@(i + 1)</th>
+      <th scope="row" id="person-index">@(i + 1)</th>
       <td>@person.FirstName</td>
       <td>@person.LastName</td>
       <td>@person.BirthDate</td>
@@ -45,7 +44,7 @@
     <td>@person.ChineseZodiacSign.name @person.ChineseZodiacSign.emoji</td>
     <td>@person.WesternZodiacSign.name @person.WesternZodiacSign.emoji</td>
       <td colspan="2">
-        <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editPersonModal">
+        <button type="button" class="btn btn-outline-secondary" data-toggle="ajax-modal" data-url="@Url.Page("Index", "EditPersonModalPartial")">
           <i class="fas fa-edit"></i>
         </button>
         <button class="btn btn-outline-secondary">

@@ -1,30 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BorodaikevychZodiac.Models.User;
-using Microsoft.AspNetCore.Hosting;
 
-namespace BorodaikevychZodiac.Models.PersonList
+namespace BorodaikevychZodiac.Models
 {
   public class PersonListModel
   {
-    public List<UserModel> PersonList { get; } = new List<UserModel>();
+    public List<PersonModel> PersonList { get; } = new List<PersonModel>();
 
     public async Task Initialize()
     {
       try
       {
         await using var fs = File.OpenRead(Path.Combine(Directory.GetCurrentDirectory(), "Storage", "storage.json"));
-        PersonList.AddRange(await JsonSerializer.DeserializeAsync<List<UserModel>>(fs));
+        PersonList.AddRange(await JsonSerializer.DeserializeAsync<List<PersonModel>>(fs));
       }
       catch (FileNotFoundException)
       {
         for (int i = 0; i < 50; i++)
         {
-          PersonList.Add(new UserModel
+          PersonList.Add(new PersonModel
           {
             Email = $"MyMail{i}@gmail.com", FirstName = $"{(char) ('A' + i % 26)}{(char) ('a' + i % 26)}",
             LastName = $"{(char) ('Z' - i % 26)}{(char) ('z' - i % 26)}"
