@@ -1,24 +1,33 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using BorodaikevychZodiac.Entities;
 using BorodaikevychZodiac.Exceptions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace BorodaikevychZodiac.Models.User
+namespace BorodaikevychZodiac.Models
 {
-  public class UserModel
+  public class PersonModel
   {
     private readonly Person _person = new Person();
 
-    public string BirthDate { get; private set; }
+    public ModelStateDictionary ModelState { get; } = new ModelStateDictionary();
+
+    private string _birthDate;
+    public string BirthDate
+    {
+      get => _birthDate;
+      set => SetBirthDateStringAsync(value).Wait();
+    }
 
     public async Task SetBirthDateStringAsync(string birthDateString)
     {
       var birthDate = await ParseBirthDateAsync(birthDateString);
       if (birthDate != default)
       {
-        BirthDate = birthDateString;
+        _birthDate = birthDateString;
         await _person.SetBirthDateAsync(birthDate);
       }
       else

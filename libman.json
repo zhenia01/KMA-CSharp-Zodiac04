@@ -9,6 +9,10 @@
     {
       "library": "font-awesome@5.12.1",
       "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "jquery-modal@0.9.2",
+      "destination": "wwwroot/lib/jquery-modal/"
     }
   ]
 }

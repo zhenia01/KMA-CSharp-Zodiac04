@@ -1,5 +1,4 @@
-﻿@using BorodaikevychZodiac.Models.User;
-@model List<UserModel>
+﻿@using BorodaikevychZodiac.Models
 <h1 class="text-center display-1">List of Persons</h1>
 <table class="table table-hover">
   <thead>
@@ -13,23 +12,47 @@
     <th scope="col">BirthDay</th>
     <th scope="col">Chinese Sign</th>
     <th scope="col">Western Sign</th>
+    <th scope="col" colspan="2">Actions</th>
   </tr>
   </thead>
   <tbody>
-  @for (int i = 0; i < Model.Count; i++)
+  @for (int i = 0; i < PersonListModel.Count; i++)
   {
-    var person = Model[i];
+    var person = await PersonListModel.GetPerson(i);
     <tr>
-      <th scope="row">@(i+1)</th>
+      <th scope="row" id="person-index">@(i + 1)</th>
       <td>@person.FirstName</td>
       <td>@person.LastName</td>
       <td>@person.BirthDate</td>
       <td>@person.Email</td>
-      <td>@(person.IsAdult ? "Yes" : "No")</td>
-      <td>@(person.IsBornToday ? "Yes🎁🎉" : "No")</td>
-      <td>@person.ChineseZodiacSign.emoji @person.ChineseZodiacSign.name</td>
-      <td>@person.WesternZodiacSign.emoji @person.WesternZodiacSign.name</td>
+      @if (person.IsAdult)
+      {
+        <td class="table-success">Yes</td>
+      }
+      else
+      {
+        <td class="table-danger">No</td>
+      }
+      @if (person.IsBornToday)
+      {
+        <td class="table-success">Yes🎁🎉</td>
+      }
+      else
+      {
+        <td class="table-danger">No</td>
+      }
+      <td>@person.ChineseZodiacSign.name @person.ChineseZodiacSign.emoji</td>
+      <td>@person.WesternZodiacSign.name @person.WesternZodiacSign.emoji</td>
+      <td colspan="2">
+        <button type="button" class="btn btn-outline-secondary" data-toggle="edit-person-modal" data-url="@Url.Page("Index", "EditPersonModal")">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn btn-outline-secondary" data-toggle="delete-person-modal" data-url="@Url.Page("Index", "DeletePerson")">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
     </tr>
   }
   </tbody>
 </table>
+<button type="button" class="btn btn-primary btn-block" data-toggle="add-person-modal" data-url="@Url.Page("Index", "AddPersonModal")">Add new person</button>

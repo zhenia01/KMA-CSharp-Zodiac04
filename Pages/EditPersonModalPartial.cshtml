@@ -1,0 +1,67 @@
+﻿@model (BorodaikevychZodiac.Models.PersonModel Person, int Index)
+
+<div class="modal fade" id="editPersonModal" tabindex="-1" role="dialog" aria-labelledby="editPersonModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editPersonModalLabel">Edit Person's info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        @if (!Model.Person.ModelState.IsValid)
+        {
+          <div class="text-center">
+            @if (Model.Person.ModelState.ContainsKey("Invalid birth date format"))
+            {
+              <p class="alert alert-warning">Type date in "DD-MM-YYYY" format</p>
+            }
+            @if (Model.Person.ModelState.ContainsKey("Early birth date") || Model.Person.ModelState.ContainsKey("Future birth date"))
+            {
+              <p class="alert alert-warning">Type real date</p>
+            }
+            @if (Model.Person.ModelState.ContainsKey("Email"))
+            {
+              <p class="alert alert-warning">Invalid email format</p>
+            }
+            @if (Model.Person.ModelState.ContainsKey("FirstName"))
+            {
+              <p class="alert alert-warning">First Name can't be empty</p>
+            }
+            @if (Model.Person.ModelState.ContainsKey("LastName"))
+            {
+              <p class="alert alert-warning">Last Name can't be empty</p>
+            }
+          </div>
+        }
+        <div class="form-group mb-4">
+          <form asp-antiforgery="true" id="editPersonForm" asp-page-handler="EditPerson">
+            <input name="index" type="hidden" id="person-index" value="@Model.Index"/>
+            <input name="IsValid" type="hidden" value="@Model.Person.ModelState.IsValid.ToString()" />
+            <div class="form-group">
+              <label name="BirthDate">Birth Date</label>
+              <input name="BirthDate" placeholder="dd-mm-yyyy" class="datepicker date form-control py-4 px-4" required>
+            </div>
+            <div class="form-group">
+              <label name="FirstName">First Name</label>
+              <input name="FirstName" placeholder="First name" class="form-control py-4 px-4 mb-2" required>
+            </div>
+            <div class="form-group">
+              <label name="LastName">Last Name</label>
+              <input name="LastName" placeholder="Last Name" class="form-control py-4 px-4 mb-2" required>
+            </div>
+            <div class="form-group">
+              <label name="Email">Email address</label>
+              <input name="Email" placeholder="abc@company.com" class="form-control py-4 px-4 mb-2" required>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-save="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

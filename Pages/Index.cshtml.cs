@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BorodaikevychZodiac.Exceptions;
-using BorodaikevychZodiac.Models.User;
+using BorodaikevychZodiac.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -11,85 +8,101 @@ namespace BorodaikevychZodiac.Pages
 {
   public class IndexModel : PageModel
   {
-    private readonly UserModel _user = new UserModel();
-    public List<UserModel> PersonList { get; } = new List<UserModel>();
-
-    public string BirthDate => _user.BirthDate;
-
-    [Required]
-    [BindProperty]
-    public string FirstName
+    public IActionResult OnGetEditPersonModal(int index)
     {
-      get => _user.FirstName;
-      set => _user.FirstName = value;
+      return Partial("EditPersonModalPartial", (new PersonModel(), index));
     }
 
-    [Required]
-    [BindProperty]
-    public string LastName
+    public IActionResult OnGetAddPersonModal()
     {
-      get => _user.LastName;
-      set => _user.LastName = value;
+      return Partial("AddPersonModalPartial", new PersonModel());
     }
 
-    public string Email => _user.Email;
-
-    public bool IsAdult => _user.IsAdult;
-    public bool IsBornToday => _user.IsBornToday;
-    public (string name, string emoji) ChineseZodiacSign => _user.ChineseZodiacSign;
-    public (string name, string emoji) WesternZodiacSign => _user.WesternZodiacSign;
-
-    public bool Tried { get; private set; }
-
-    public async Task OnPost(string birthDate, string email)
+    public IActionResult OnGetPersonList()
     {
-      Tried = true;
+      return Partial("PersonListPartial");
+    }
+
+    public async Task OnGetDeletePersonAsync(int index)
+    {
+      await PersonListModel.DeletePerson(index);
+    }
+
+    private static async Task<PersonModel> NewPersonModelAsync(string birthDate, string email,
+      string firstName,
+      string lastName)
+    {
+      var person = new PersonModel();
+
+      if (string.IsNullOrWhiteSpace(firstName))
+      {
+        person.ModelState.AddModelError("FirstName", "First Name can't be empty");
+      }
+
+      person.FirstName = firstName;
+
+      if (string.IsNullOrWhiteSpace(lastName))
+      {
+        person.ModelState.AddModelError("LastName", "Last Name can't be empty");
+      }
+
+      person.LastName = lastName;
 
       try
       {
-        await _user.SetBirthDateStringAsync(birthDate);
-      }
-      catch (TooEarlyBirthDateException e)
-      {
-        ModelState.AddModelError("Early birth date", e.Message);
-      }
-      catch (FutureBirthDateException e)
-      {
-        ModelState.AddModelError("Future birth date", e.Message);
-      }
-      catch (InvalidDateFormatException e)
-      {
-        ModelState.AddModelError("Invalid birth date format", e.Message);
-      }
-
-      try
-      {
-        _user.Email = email;
+        person.Email = email;
       }
       catch (InvalidEmailFormatException e)
       {
-        ModelState.AddModelError("Email", e.Message);
+        person.ModelState.AddModelError("Email", e.Message);
       }
+
+      try
+      {
+        await person.SetBirthDateStringAsync(birthDate);
+      }
+      catch (TooEarlyBirthDateException e)
+      {
+        person.ModelState.AddModelError("Early birth date", e.Message);
+      }
+      catch (FutureBirthDateException e)
+      {
+        person.ModelState.AddModelError("Future birth date", e.Message);
+      }
+      catch (InvalidDateFormatException e)
+      {
+        person.ModelState.AddModelError("Invalid birth date format", e.Message);
+      }
+
+      return person;
     }
 
-    public async Task OnGet()
+    public async Task<IActionResult> OnPostAddPersonAsync(string birthDate, string email,
+      string firstName,
+      string lastName)
     {
-      for (int i = 0; i < 50; i++)
+      var person = await NewPersonModelAsync(birthDate, email, firstName, lastName);
+      
+      if (person.ModelState.IsValid)
       {
-        PersonList.Add(new UserModel
-        {
-          Email = $"MyMail{i}@gmail.com", FirstName = $"{(char) ('A' + i % 26)}{(char) ('a' + i % 26)}",
-          LastName = $"{(char) ('Z' - i % 26)}{(char) ('z' - i % 26)}"
-        });
-        int d = i % 28 + 1;
-        int m = i % 12 + 1;
-        int y = 1900 + i;
-        var sb = new StringBuilder();
-        sb.Append(d <= 9 ? $"0{d}-" : $"{d}-");
-        sb.Append(m <= 9 ? $"0{m}-" : $"{m}-");
-        sb.Append($"{y}");
-        await PersonList[i].SetBirthDateStringAsync(sb.ToString());
+        await PersonListModel.AddPerson(person);
       }
+
+      return Partial("AddPersonModalPartial", person);
+    }
+
+    public async Task<IActionResult> OnPostEditPersonAsync(int index, string birthDate, string email,
+      string firstName,
+      string lastName)
+    {
+      var person = await NewPersonModelAsync(birthDate, email, firstName, lastName);
+      
+      if (person.ModelState.IsValid)
+      {
+        await PersonListModel.SetPerson(index, person);
+      }
+
+      return Partial("EditPersonModalPartial", (person, index));
     }
   }
 }

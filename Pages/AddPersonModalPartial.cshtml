@@ -1,0 +1,66 @@
+﻿@model BorodaikevychZodiac.Models.PersonModel
+
+<div class="modal fade" id="addPersonModal" tabindex="-1" role="dialog" aria-labelledby="editPersonModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editPersonModalLabel">Edit Person's info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        @if (!Model.ModelState.IsValid)
+        {
+          <div class="text-center">
+            @if (Model.ModelState.ContainsKey("Invalid birth date format"))
+            {
+              <p class="alert alert-warning">Type date in "DD-MM-YYYY" format</p>
+            }
+            @if (Model.ModelState.ContainsKey("Early birth date") || Model.ModelState.ContainsKey("Future birth date"))
+            {
+              <p class="alert alert-warning">Type real date</p>
+            }
+            @if (Model.ModelState.ContainsKey("Email"))
+            {
+              <p class="alert alert-warning">Invalid email format</p>
+            }
+            @if (Model.ModelState.ContainsKey("FirstName"))
+            {
+              <p class="alert alert-warning">First Name can't be empty</p>
+            }
+            @if (Model.ModelState.ContainsKey("LastName"))
+            {
+              <p class="alert alert-warning">Last Name can't be empty</p>
+            }
+          </div>
+        }
+        <div class="form-group mb-4">
+          <form asp-antiforgery="true" id="addPersonForm" asp-page-handler="AddPerson">
+            <input name="IsValid" type="hidden" value="@Model.ModelState.IsValid.ToString()" />
+            <div class="form-group">
+              <label asp-for="BirthDate">Birth Date</label>
+              <input asp-for="BirthDate" placeholder="dd-mm-yyyy" class="datepicker date form-control py-4 px-4" required>
+            </div>
+            <div class="form-group">
+              <label asp-for="FirstName">First Name</label>
+              <input asp-for="FirstName" placeholder="First name" class="form-control py-4 px-4 mb-2" required>
+            </div>
+            <div class="form-group">
+              <label asp-for="LastName">Last Name</label>
+              <input asp-for="LastName" placeholder="Last Name" class="form-control py-4 px-4 mb-2" required>
+            </div>
+            <div class="form-group">
+              <label asp-for="Email">Email address</label>
+              <input asp-for="Email" placeholder="abc@company.com" class="form-control py-4 px-4 mb-2" required>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-save="modal">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
