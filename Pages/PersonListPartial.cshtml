@@ -1,4 +1,4 @@
-﻿@using BorodaikevychZodiac.Models
+﻿@model List<BorodaikevychZodiac.Models.PersonModel>
 <h1 class="text-center display-1">List of Persons</h1>
 <table class="table table-hover">
   <thead>
@@ -16,9 +16,9 @@
   </tr>
   </thead>
   <tbody>
-  @for (int i = 0; i < PersonListModel.Count; i++)
+  @for (int i = 0; i < Model.Count; i++)
   {
-    var person = await PersonListModel.GetPerson(i);
+    var person = Model[i];
     <tr>
       <th scope="row" id="person-index">@(i + 1)</th>
       <td>@person.FirstName</td>

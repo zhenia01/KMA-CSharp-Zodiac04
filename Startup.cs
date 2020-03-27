@@ -1,3 +1,5 @@
+using BorodaikevychZodiac.Entities;
+using BorodaikevychZodiac.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +21,7 @@ namespace BorodaikevychZodiac
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddRazorPages();
+      services.AddSingleton<PersonListService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
