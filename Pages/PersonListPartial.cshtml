@@ -1,18 +1,57 @@
 ﻿@model List<BorodaikevychZodiac.Models.PersonModel>
-<h1 class="text-center display-1">List of Persons</h1>
-<table class="table table-hover">
+<table class="table table-hover table-sm">
   <thead>
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">First Name</th>
-    <th scope="col">Last Name</th>
-    <th scope="col">Birth Date</th>
-    <th scope="col">Email</th>
-    <th scope="col">Adult</th>
-    <th scope="col">BirthDay</th>
-    <th scope="col">Chinese Sign</th>
-    <th scope="col">Western Sign</th>
-    <th scope="col" colspan="2">Actions</th>
+  <tr class="text-nowrap">
+    <th scope="col" class="align-middle">#</th>
+    <th scope="col">
+      First Name
+      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="0" data-url="@Url.Page("Index", "Sort")">
+        <i class="fas fa-sort"></i>
+      </button>
+    </th>
+    <th scope="col">
+      Last Name
+      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="1" data-url="@Url.Page("Index", "Sort")">
+        <i class="fas fa-sort"></i>
+      </button>
+    </th>
+    <th scope="col">
+      Birth Date
+      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="2" data-url="@Url.Page("Index", "Sort")">
+        <i class="fas fa-sort"></i>
+      </button>
+    </th>
+    <th scope="col">
+      Email
+      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="3" data-url="@Url.Page("Index", "Sort")">
+        <i class="fas fa-sort"></i>
+      </button>
+    </th>
+    <th scope="col">
+      Adult
+      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="4" data-url="@Url.Page("Index", "Sort")">
+        <i class="fas fa-sort"></i>
+      </button>
+    </th>
+    <th scope="col">
+      BirthDay
+      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="5" data-url="@Url.Page("Index", "Sort")">
+        <i class="fas fa-sort"></i>
+      </button>
+    </th>
+    <th scope="col">
+      Chinese Sign
+      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="6" data-url="@Url.Page("Index", "Sort")">
+        <i class="fas fa-sort"></i>
+      </button>
+    </th>
+    <th scope="col">
+      Western Sign
+      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="7" data-url="@Url.Page("Index", "Sort")">
+        <i class="fas fa-sort"></i>
+      </button>
+    </th>
+    <th scope="col" colspan="2" class="align-middle">Actions</th>
   </tr>
   </thead>
   <tbody>
@@ -23,7 +62,7 @@
       <th scope="row" id="person-index">@(i + 1)</th>
       <td>@person.FirstName</td>
       <td>@person.LastName</td>
-      <td>@person.BirthDate</td>
+      <td>@person.BirthDateString</td>
       <td>@person.Email</td>
       @if (person.IsAdult)
       {

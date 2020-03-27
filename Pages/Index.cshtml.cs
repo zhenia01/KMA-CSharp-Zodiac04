@@ -34,14 +34,22 @@ namespace BorodaikevychZodiac.Pages
       return Partial("PersonListPartial", PersonList);
     }
 
-    //public Task<IActionResult> OnGetFilter
+    public IActionResult OnGetSort(int index)
+    {
+      if (index >= 0 || index <= 7)
+      {
+        _personListService.Sort((PersonListSortingOption) index);
+      }
+
+      return Partial("PersonListPartial", PersonList);
+    }
 
     public async Task OnGetDeletePersonAsync(int index)
     {
       await _personListService.DeletePerson(index);
     }
 
-    private static async Task<PersonModel> NewPersonModelAsync(string birthDate, string email,
+    private static async Task<PersonModel> NewPersonModelAsync(string birthDateString, string email,
       string firstName,
       string lastName)
     {
@@ -72,7 +80,7 @@ namespace BorodaikevychZodiac.Pages
 
       try
       {
-        await person.SetBirthDateStringAsync(birthDate);
+        await person.SetBirthDateStringAsync(birthDateString);
       }
       catch (TooEarlyBirthDateException e)
       {
@@ -90,11 +98,11 @@ namespace BorodaikevychZodiac.Pages
       return person;
     }
 
-    public async Task<IActionResult> OnPostAddPersonAsync(string birthDate, string email,
+    public async Task<IActionResult> OnPostAddPersonAsync(string birthDateString, string email,
       string firstName,
       string lastName)
     {
-      var person = await NewPersonModelAsync(birthDate, email, firstName, lastName);
+      var person = await NewPersonModelAsync(birthDateString, email, firstName, lastName);
       
       if (person.ModelState.IsValid)
       {
@@ -104,11 +112,11 @@ namespace BorodaikevychZodiac.Pages
       return Partial("AddPersonModalPartial", person);
     }
 
-    public async Task<IActionResult> OnPostEditPersonAsync(int index, string birthDate, string email,
+    public async Task<IActionResult> OnPostEditPersonAsync(int index, string birthDateString, string email,
       string firstName,
       string lastName)
     {
-      var person = await NewPersonModelAsync(birthDate, email, firstName, lastName);
+      var person = await NewPersonModelAsync(birthDateString, email, firstName, lastName);
       
       if (person.ModelState.IsValid)
       {

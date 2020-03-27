@@ -5,14 +5,24 @@ $(() => {
     const $personListPlaceholder = $("#person-list-placeholder");
     const $addPersonModalPlaceholder = $("#add-person-modal-placeholder");
 
+    $("body").on("click", "button[data-toggle='sort-person-list']",
+        function() {
+            const index = parseInt($(this).data("sorting-index"));
+            const url = $(this).data("url");
+
+            $.get(url, { "index": index }).done((list) => {
+                $personListPlaceholder.empty();
+                $personListPlaceholder.append(list);
+            });
+        });
+
     $personListPlaceholder.on("click",
         "button[data-toggle='edit-person-modal']",
         function(e) {
             const url = $(this).data("url");
-
             const index = parseInt(`${$(this).parents("tr").find("#person-index").text()}`);
 
-            $.get(url, {"index": index-1}).done((data) => {
+            $.get(url, { "index": index - 1 }).done((data) => {
                 $editPersonModalPlaceholder.empty();
                 $editPersonModalPlaceholder.append(data);
                 $editPersonModalPlaceholder.find(".modal").first().modal("show");

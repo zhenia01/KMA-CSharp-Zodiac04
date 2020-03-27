@@ -15,19 +15,22 @@ namespace BorodaikevychZodiac.Models
 
     public ModelStateDictionary ModelState { get; } = new ModelStateDictionary();
 
-    private string _birthDate;
-    public string BirthDate
+    private string _birthDateString;
+
+    public string BirthDateString
     {
-      get => _birthDate;
+      get => _birthDateString;
       set => SetBirthDateStringAsync(value).Wait();
     }
+
+    public DateTime BirthDateDateTime => _person.BirthDate;
 
     public async Task SetBirthDateStringAsync(string birthDateString)
     {
       var birthDate = await ParseBirthDateAsync(birthDateString);
       if (birthDate != default)
       {
-        _birthDate = birthDateString;
+        _birthDateString = birthDateString;
         await _person.SetBirthDateAsync(birthDate);
       }
       else
