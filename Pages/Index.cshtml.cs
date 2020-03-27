@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BorodaikevychZodiac.Exceptions;
 using BorodaikevychZodiac.Models;
+using BorodaikevychZodiac.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,6 +10,15 @@ namespace BorodaikevychZodiac.Pages
 {
   public class IndexModel : PageModel
   {
+    private readonly PersonListService _personListService;
+
+    public List<PersonModel> PersonList => _personListService.PersonList;
+
+    public IndexModel(PersonListService personListService)
+    {
+      _personListService = personListService;
+    }
+
     public IActionResult OnGetEditPersonModal(int index)
     {
       return Partial("EditPersonModalPartial", (new PersonModel(), index));
@@ -20,12 +31,14 @@ namespace BorodaikevychZodiac.Pages
 
     public IActionResult OnGetPersonList()
     {
-      return Partial("PersonListPartial");
+      return Partial("PersonListPartial", PersonList);
     }
+
+    //public Task<IActionResult> OnGetFilter
 
     public async Task OnGetDeletePersonAsync(int index)
     {
-      await PersonListModel.DeletePerson(index);
+      await _personListService.DeletePerson(index);
     }
 
     private static async Task<PersonModel> NewPersonModelAsync(string birthDate, string email,
@@ -85,7 +98,7 @@ namespace BorodaikevychZodiac.Pages
       
       if (person.ModelState.IsValid)
       {
-        await PersonListModel.AddPerson(person);
+        await _personListService.AddPerson(person);
       }
 
       return Partial("AddPersonModalPartial", person);
@@ -99,7 +112,7 @@ namespace BorodaikevychZodiac.Pages
       
       if (person.ModelState.IsValid)
       {
-        await PersonListModel.SetPerson(index, person);
+        await _personListService.SetPerson(index, person);
       }
 
       return Partial("EditPersonModalPartial", (person, index));
