@@ -47,11 +47,16 @@
     </th>
     <th scope="col">
       Western Sign
-      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="7" data-url="@Url.Page("Index", "Sort")">
-        <i class="fas fa-sort"></i>
-      </button>
+      <div class="filter-sort" data-action-index="7">
+        <partial name="WesternZodiacOptionsPartial" model="Model"/>
+        <button class="btn btn-secondary btn-sm " data-toggle="sort-person-list" data-url="@Url.Page("Index", "Sort")">
+          <i class="fas fa-sort"></i>
+        </button>
+      </div>
     </th>
-    <th scope="col" colspan="2" class="align-middle">Actions</th>
+    <th scope="col" colspan="2" class="align-middle">
+      Actions
+    </th>
   </tr>
   </thead>
   <tbody>

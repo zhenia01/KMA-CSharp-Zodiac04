@@ -2,14 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using BorodaikevychZodiac.Entities;
 using BorodaikevychZodiac.Models;
 
 namespace BorodaikevychZodiac.Services
 {
-  public enum PersonListSortingOption
+  public enum PersonListActionOption // saving\filtering
   {
     FirstName,
     LastName,
@@ -28,7 +30,9 @@ namespace BorodaikevychZodiac.Services
     private readonly string _path =
       Path.Combine(Directory.GetCurrentDirectory(), "Storage", "storage.json");
 
-    private readonly BitArray _sorting = new BitArray(8);
+    private readonly BitArray _sortingFlags = new BitArray(8);
+    private readonly BitArray _filteringFlags = new BitArray(8);
+    private readonly string[] _filteringValues = new string[8];
 
     public PersonListService()
     {
@@ -88,26 +92,60 @@ namespace BorodaikevychZodiac.Services
       await SerializeList();
     }
 
-    public void Sort(PersonListSortingOption option)
+    public void Sort(PersonListActionOption option)
     {
-      int index = (int)option;
-      _sorting[index] = !_sorting[index];
+      int index = (int) option;
+      _sortingFlags[index] = !_sortingFlags[index];
       PersonList.Sort((p1, p2) =>
+      {
+        int result = option switch
         {
-          int result = option switch
-          {
-            PersonListSortingOption.FirstName => p1.FirstName.CompareTo(p2.FirstName),
-            PersonListSortingOption.LastName => p1.LastName.CompareTo(p2.LastName),
-            PersonListSortingOption.BirthDate => p1.BirthDateDateTime.CompareTo(p2.BirthDateDateTime),
-            PersonListSortingOption.Email => p1.Email.CompareTo(p2.Email),
-            PersonListSortingOption.Adult => p1.IsAdult.CompareTo(p2.IsAdult),
-            PersonListSortingOption.BirthDay => p1.IsBornToday.CompareTo(p2.IsBornToday),
-            PersonListSortingOption.ChineseSign => p1.ChineseZodiacSign.name.CompareTo(p2.ChineseZodiacSign.name),
-            PersonListSortingOption.WesternSign => p1.WesternZodiacSign.name.CompareTo(p2.WesternZodiacSign.name),
-            _ => -1
-          };
-          return _sorting[index] ? result : -result;
-        });
+          PersonListActionOption.FirstName => p1.FirstName.CompareTo(p2.FirstName),
+          PersonListActionOption.LastName => p1.LastName.CompareTo(p2.LastName),
+          PersonListActionOption.BirthDate => p1.BirthDateDateTime.CompareTo(p2.BirthDateDateTime),
+          PersonListActionOption.Email => p1.Email.CompareTo(p2.Email),
+          PersonListActionOption.Adult => p1.IsAdult.CompareTo(p2.IsAdult),
+          PersonListActionOption.BirthDay => p1.IsBornToday.CompareTo(p2.IsBornToday),
+          PersonListActionOption.ChineseSign => p1.ChineseZodiacSign.name.CompareTo(p2.ChineseZodiacSign.name),
+          PersonListActionOption.WesternSign => p1.WesternZodiacSign.name.CompareTo(p2.WesternZodiacSign.name),
+          _ => -1
+        };
+        return _sortingFlags[index] ? result : -result;
+      });
+    }
+
+    public List<PersonModel> ApplyFilter(PersonListActionOption option, string value)
+    {
+      int index = (int) option;
+      _filteringFlags[index] = true;
+      _filteringValues[index] = value;
+      return Filter();
+    }
+
+    public List<PersonModel> RemoveFilter(PersonListActionOption option)
+    {
+      int index = (int) option;
+      _filteringFlags[index] = false;
+      _filteringValues[index] = null;
+      return Filter();
+    }
+
+    private List<PersonModel> Filter()
+    {
+      return PersonList.AsParallel().Where(p =>
+        (!_filteringFlags[0] ||
+         p.FirstName.Contains(_filteringValues[0], StringComparison.InvariantCultureIgnoreCase)) &&
+        (!_filteringFlags[1] ||
+         p.LastName.Contains(_filteringValues[1], StringComparison.InvariantCultureIgnoreCase)) &&
+        (!_filteringFlags[2] || p.BirthDateString == _filteringValues[2]) &&
+        (!_filteringFlags[3] || p.Email.Contains(_filteringValues[3], StringComparison.InvariantCultureIgnoreCase)) &&
+        (!_filteringFlags[4] ||
+         p.IsAdult.ToString().Equals(_filteringValues[4], StringComparison.InvariantCultureIgnoreCase)) &&
+        (!_filteringFlags[5] || p.IsBornToday.ToString()
+          .Equals(_filteringValues[5], StringComparison.InvariantCultureIgnoreCase)) &&
+        (!_filteringFlags[6] || $"{p.ChineseZodiacSign.name} {p.ChineseZodiacSign.emoji}" == _filteringValues[6]) &&
+        (!_filteringFlags[7] || $"{p.WesternZodiacSign.name} {p.WesternZodiacSign.emoji}" == _filteringValues[7])
+      ).ToList();
     }
 
     private async Task SerializeList()

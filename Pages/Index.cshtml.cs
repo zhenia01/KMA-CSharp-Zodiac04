@@ -38,9 +38,27 @@ namespace BorodaikevychZodiac.Pages
     {
       if (index >= 0 || index <= 7)
       {
-        _personListService.Sort((PersonListSortingOption) index);
+        _personListService.Sort((PersonListActionOption) index);
       }
 
+      return Partial("PersonListPartial", PersonList);
+    }
+
+    public IActionResult OnGetApplyFilter(int index, string value)
+    {
+      if (index >= 0 || index <= 7)
+      {
+        return Partial("PersonListPartial", _personListService.ApplyFilter((PersonListActionOption)index, value));
+      }
+      return Partial("PersonListPartial", PersonList);
+    }
+
+    public IActionResult OnGetRemoveFilter(int index)
+    {
+      if (index >= 0 || index <= 7)
+      {
+        return Partial("PersonListPartial", _personListService.RemoveFilter((PersonListActionOption)index));
+      }
       return Partial("PersonListPartial", PersonList);
     }
 
@@ -50,7 +68,7 @@ namespace BorodaikevychZodiac.Pages
     }
 
     private static async Task<PersonModel> NewPersonModelAsync(string birthDateString, string email,
-      string firstName,
+      string firstName, 
       string lastName)
     {
       var person = new PersonModel();
