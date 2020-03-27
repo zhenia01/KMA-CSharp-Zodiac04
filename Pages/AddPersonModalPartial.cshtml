@@ -39,8 +39,8 @@
           <form asp-antiforgery="true" id="addPersonForm" asp-page-handler="AddPerson">
             <input name="IsValid" type="hidden" value="@Model.ModelState.IsValid.ToString()" />
             <div class="form-group">
-              <label asp-for="BirthDate">Birth Date</label>
-              <input asp-for="BirthDate" placeholder="dd-mm-yyyy" class="datepicker date form-control py-4 px-4" required>
+              <label asp-for="BirthDateString">Birth Date</label>
+              <input asp-for="BirthDateString" placeholder="dd-mm-yyyy" class="datepicker date form-control py-4 px-4" required>
             </div>
             <div class="form-group">
               <label asp-for="FirstName">First Name</label>
