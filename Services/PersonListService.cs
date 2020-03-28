@@ -80,7 +80,7 @@ namespace BorodaikevychZodiac.Services
           PersonList.Add(new PersonModel
           {
             FirstName = firstName,
-            LastName = firstName,
+            LastName = lastName,
             Email = $"{firstName}_{lastName}{i}@gmail.com"
           });
 
