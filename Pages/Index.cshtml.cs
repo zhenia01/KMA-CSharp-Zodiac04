@@ -38,7 +38,7 @@ namespace BorodaikevychZodiac.Pages
     {
       if (index >= 0 || index <= 7)
       {
-        _personListService.Sort((PersonListActionOption) index);
+        return Partial("PersonListPartial", _personListService.Sort((PersonListActionOption) index));
       }
 
       return Partial("PersonListPartial", PersonList);

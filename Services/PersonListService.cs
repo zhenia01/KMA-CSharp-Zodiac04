@@ -124,7 +124,7 @@ namespace BorodaikevychZodiac.Services
       await SerializeList();
     }
 
-    public void Sort(PersonListActionOption option)
+    public List<PersonModel> Sort(PersonListActionOption option)
     {
       int index = (int) option;
       _sortingFlags[index] = !_sortingFlags[index];
@@ -144,6 +144,7 @@ namespace BorodaikevychZodiac.Services
         };
         return _sortingFlags[index] ? result : -result;
       });
+      return Filter();
     }
 
     public List<PersonModel> ApplyFilter(PersonListActionOption option, string value)
