@@ -5,53 +5,82 @@
     <th scope="col" class="align-middle">#</th>
     <th scope="col">
       First Name
-      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="0" data-url="@Url.Page("Index", "Sort")">
-        <i class="fas fa-sort"></i>
-      </button>
+      <div class="filter-sort" data-action-index="0">
+        <partial name="FilteringOptionsPartial" model="(Model, 0)" />
+        <button class="btn btn-secondary btn-sm " data-toggle="sort-person-list" data-url="@Url.Page("Index", "Sort")">
+          <i class="fas fa-sort"></i>
+        </button>
+      </div>
     </th>
     <th scope="col">
       Last Name
-      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="1" data-url="@Url.Page("Index", "Sort")">
-        <i class="fas fa-sort"></i>
-      </button>
+      <div class="filter-sort" data-action-index="1">
+        <partial name="FilteringOptionsPartial" model="(Model, 1)" />
+        <button class="btn btn-secondary btn-sm " data-toggle="sort-person-list" data-url="@Url.Page("Index", "Sort")">
+          <i class="fas fa-sort"></i>
+        </button>
+      </div>
     </th>
     <th scope="col">
       Birth Date
-      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="2" data-url="@Url.Page("Index", "Sort")">
-        <i class="fas fa-sort"></i>
-      </button>
+      <div class="filter-sort" data-action-index="2">
+        <partial name="FilteringOptionsPartial" model="(Model, 2)" />
+        <button class="btn btn-secondary btn-sm " data-toggle="sort-person-list" data-url="@Url.Page("Index", "Sort")">
+          <i class="fas fa-sort"></i>
+        </button>
+      </div>
     </th>
     <th scope="col">
       Email
-      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="3" data-url="@Url.Page("Index", "Sort")">
-        <i class="fas fa-sort"></i>
-      </button>
+      <div class="filter-sort" data-action-index="3">
+        <partial name="FilteringOptionsPartial" model="(Model, 3)" />
+        <button class="btn btn-secondary btn-sm " data-toggle="sort-person-list" data-url="@Url.Page("Index", "Sort")">
+          <i class="fas fa-sort"></i>
+        </button>
+      </div>
     </th>
     <th scope="col">
       Adult
-      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="4" data-url="@Url.Page("Index", "Sort")">
-        <i class="fas fa-sort"></i>
-      </button>
+      <div class="filter-sort" data-action-index="4">
+        <partial name="FilteringOptionsPartial" model="(Model, 4)" />
+        <button class="btn btn-secondary btn-sm " data-toggle="sort-person-list" data-url="@Url.Page("Index", "Sort")">
+          <i class="fas fa-sort"></i>
+        </button>
+      </div>
     </th>
     <th scope="col">
       BirthDay
-      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="5" data-url="@Url.Page("Index", "Sort")">
-        <i class="fas fa-sort"></i>
-      </button>
+      <div class="filter-sort" data-action-index="5">
+        <partial name="FilteringOptionsPartial" model="(Model, 5)" />
+        <button class="btn btn-secondary btn-sm " data-toggle="sort-person-list" data-url="@Url.Page("Index", "Sort")">
+          <i class="fas fa-sort"></i>
+        </button>
+      </div>
     </th>
     <th scope="col">
       Chinese Sign
-      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="6" data-url="@Url.Page("Index", "Sort")">
-        <i class="fas fa-sort"></i>
-      </button>
+      <div class="filter-sort" data-action-index="6">
+        <partial name="FilteringOptionsPartial" model="(Model, 6)" />
+        <button class="btn btn-secondary btn-sm " data-toggle="sort-person-list" data-url="@Url.Page("Index", "Sort")">
+          <i class="fas fa-sort"></i>
+        </button>
+      </div>
     </th>
     <th scope="col">
       Western Sign
-      <button class="btn btn-light btn-sm" data-toggle="sort-person-list" data-sorting-index="7" data-url="@Url.Page("Index", "Sort")">
-        <i class="fas fa-sort"></i>
+      <div class="filter-sort" data-action-index="7">
+        <partial name="FilteringOptionsPartial" model="(Model, 7)"/>
+        <button class="btn btn-secondary btn-sm " data-toggle="sort-person-list" data-url="@Url.Page("Index", "Sort")">
+          <i class="fas fa-sort"></i>
+        </button>
+      </div>
+    </th>
+    <th scope="col" colspan="2" class="align-middle">
+      Actions<br/>
+      <button type="button" class="btn btn-sm btn-danger" data-toggle="remove-all-filters-person-list" data-url="@Url.Page("Index", "RemoveAllFilters")">
+        <i class="fas fa-filter">   All</i>
       </button>
     </th>
-    <th scope="col" colspan="2" class="align-middle">Actions</th>
   </tr>
   </thead>
   <tbody>

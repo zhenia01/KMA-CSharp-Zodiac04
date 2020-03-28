@@ -5,12 +5,57 @@ $(() => {
     const $personListPlaceholder = $("#person-list-placeholder");
     const $addPersonModalPlaceholder = $("#add-person-modal-placeholder");
 
-    $("body").on("click", "button[data-toggle='sort-person-list']",
+    $personListPlaceholder.on("click", "button[data-toggle='sort-person-list']",
         function() {
-            const index = parseInt($(this).data("sorting-index"));
+            const index = parseInt($(this).parents(".filter-sort").data("action-index"));
             const url = $(this).data("url");
 
             $.get(url, { "index": index }).done((list) => {
+                $personListPlaceholder.empty();
+                $personListPlaceholder.append(list);
+            });
+        });    
+
+    $personListPlaceholder.on("click", "a[data-toggle='apply-options-filter-person-list']",
+        function() {
+            const index = parseInt($(this).parents(".filter-sort").data("action-index"));
+            const url = $(this).parent(".dropdown-menu").data("url");
+            const value = $(this).text();
+
+            $.get(url, {"index":index, "value":value}).done((list) => {
+                $personListPlaceholder.empty();
+                $personListPlaceholder.append(list);
+            });
+        });   
+    
+    $personListPlaceholder.on("click", "button[data-toggle='apply-text-filter-person-list']",
+        function() {
+            const index = parseInt($(this).parents(".filter-sort").data("action-index"));
+            const url = $(this).parents(".dropdown-menu").data("url");
+            const value = $(this).parent().siblings("input[type='text']").val();
+
+            $.get(url, {"index":index, "value":value}).done((list) => {
+                $personListPlaceholder.empty();
+                $personListPlaceholder.append(list);
+            });
+        });
+
+    $personListPlaceholder.on("click", "button[data-toggle='remove-filter-person-list']",
+        function() {
+            const index = parseInt($(this).parents(".filter-sort").data("action-index"));
+            const url = $(this).data("url");
+
+            $.get(url, {"index":index}).done((list) => {
+                $personListPlaceholder.empty();
+                $personListPlaceholder.append(list);
+            });
+        });    
+    
+    $personListPlaceholder.on("click", "button[data-toggle='remove-all-filters-person-list']",
+        function() {
+            const url = $(this).data("url");
+
+            $.get(url).done((list) => {
                 $personListPlaceholder.empty();
                 $personListPlaceholder.append(list);
             });
@@ -103,10 +148,10 @@ $(() => {
             });
         });
 
-    $("[id$='modal-placeholder']").on("focusin",
+    $("body").on("focusin",
         "input.datepicker",
-        (e) => {
-            $(".datepicker").first().datepicker({
+        function () {
+            $(this).datepicker({
                 clearBtn: true,
                 format: "dd-mm-yyyy",
                 endDate: "0d",
