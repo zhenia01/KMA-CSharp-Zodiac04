@@ -2,7 +2,7 @@
 
 namespace BorodaikevychZodiac.Exceptions
 {
-  public class FutureBirthDateException : ArgumentOutOfRangeException
+  internal class FutureBirthDateException : ArgumentOutOfRangeException
   {
     public FutureBirthDateException(string message) : base(message)
     { 

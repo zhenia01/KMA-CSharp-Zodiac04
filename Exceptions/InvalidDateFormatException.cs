@@ -2,7 +2,7 @@
 
 namespace BorodaikevychZodiac.Exceptions
 {
-  public class InvalidDateFormatException: FormatException
+  internal class InvalidDateFormatException: FormatException
   {
     public InvalidDateFormatException(string message) : base(message)
     {

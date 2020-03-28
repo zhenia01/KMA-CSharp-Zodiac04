@@ -2,7 +2,7 @@
 
 namespace BorodaikevychZodiac.Exceptions
 {
-  public class TooEarlyBirthDateException : ArgumentOutOfRangeException
+  internal class TooEarlyBirthDateException : ArgumentOutOfRangeException
   {
     public TooEarlyBirthDateException(string message) : base(message)
     {
