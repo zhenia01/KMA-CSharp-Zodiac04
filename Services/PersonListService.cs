@@ -130,6 +130,17 @@ namespace BorodaikevychZodiac.Services
       return Filter();
     }
 
+    public List<PersonModel> RemoveAllFilters()
+    {
+      for (int i = 0; i < _filteringValues.Length; i++)
+      {
+        _filteringFlags[i] = false;
+        _filteringValues[i] = null;
+      }
+
+      return PersonList;
+    }
+
     private List<PersonModel> Filter()
     {
       return PersonList.AsParallel().Where(p =>
@@ -139,10 +150,10 @@ namespace BorodaikevychZodiac.Services
          p.LastName.Contains(_filteringValues[1], StringComparison.InvariantCultureIgnoreCase)) &&
         (!_filteringFlags[2] || p.BirthDateString == _filteringValues[2]) &&
         (!_filteringFlags[3] || p.Email.Contains(_filteringValues[3], StringComparison.InvariantCultureIgnoreCase)) &&
-        (!_filteringFlags[4] ||
-         p.IsAdult.ToString().Equals(_filteringValues[4], StringComparison.InvariantCultureIgnoreCase)) &&
-        (!_filteringFlags[5] || p.IsBornToday.ToString()
-          .Equals(_filteringValues[5], StringComparison.InvariantCultureIgnoreCase)) &&
+        (!_filteringFlags[4] || _filteringValues[4] == "Yes" && p.IsAdult ||
+         _filteringValues[4] == "No" && !p.IsAdult) &&
+        (!_filteringFlags[5] || _filteringValues[5] == "Yes" && p.IsBornToday ||
+         _filteringValues[5] == "No" && !p.IsBornToday) &&
         (!_filteringFlags[6] || $"{p.ChineseZodiacSign.name} {p.ChineseZodiacSign.emoji}" == _filteringValues[6]) &&
         (!_filteringFlags[7] || $"{p.WesternZodiacSign.name} {p.WesternZodiacSign.emoji}" == _filteringValues[7])
       ).ToList();

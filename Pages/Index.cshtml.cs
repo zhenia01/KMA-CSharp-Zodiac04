@@ -61,6 +61,12 @@ namespace BorodaikevychZodiac.Pages
       }
       return Partial("PersonListPartial", PersonList);
     }
+    
+    public IActionResult OnGetRemoveAllFilters()
+    {
+      _personListService.RemoveAllFilters();
+      return OnGetPersonList();
+    }
 
     public async Task OnGetDeletePersonAsync(int index)
     {

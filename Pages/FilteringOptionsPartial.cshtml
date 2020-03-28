@@ -1,0 +1,88 @@
+﻿@model (List<BorodaikevychZodiac.Models.PersonModel> List, int Index)
+<span class="btn-group">
+  <button type="button" class="btn btn-sm btn-danger" data-toggle="remove-filter-person-list" data-url="@Url.Page("Index", "RemoveFilter")">
+    <i class="fas fa-filter"></i>
+  </button>
+  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  </button>
+  <span class="dropdown-menu" aria-labelledby="dropdownMenuButton" data-url="@Url.Page("Index", "ApplyFilter")">
+    @{
+      switch (Model.Index)
+      {
+        case 0:
+        {
+          <span class="input-group">
+            <input type="text" class="form-control" placeholder="First Name">
+            <span class="input-group-append">
+              <button class="btn btn-outline-secondary btn-sm" data-toggle="apply-text-filter-person-list">
+                <i class="fas fa-check-square"></i>
+              </button>
+            </span>
+          </span>
+          break;
+        }
+        case 1:
+        {
+          <span class="input-group">
+            <input type="text" class="form-control" placeholder="Last Name">
+            <span class="input-group-append">
+              <button class="btn btn-outline-secondary btn-sm" data-toggle="apply-text-filter-person-list">
+                <i class="fas fa-check-square"></i>
+              </button>
+            </span>
+          </span>
+          break;
+        }
+        case 2:
+        {
+          <span class="input-group">
+            <input type="text" class="form-control datepicker date" placeholder="dd-mm-yyyy">
+            <span class="input-group-append">
+              <button class="btn btn-outline-secondary btn-sm" data-toggle="apply-text-filter-person-list">
+                <i class="fas fa-check-square"></i>
+              </button>
+            </span>
+          </span>
+          break;
+        }
+        case 3:
+        {
+          <span class="input-group">
+            <input type="text" class="form-control" placeholder="Email">
+            <span class="input-group-append">
+              <button class="btn btn-outline-secondary btn-sm" data-toggle="apply-text-filter-person-list">
+                <i class="fas fa-check-square"></i>
+              </button>
+            </span>
+          </span>
+          break;
+        }
+        case 4:
+        case 5:
+        {
+          <a class="dropdown-item alert-success" data-toggle="apply-options-filter-person-list" href="#">Yes</a>
+          <a class="dropdown-item alert-danger" data-toggle="apply-options-filter-person-list" href="#">No</a>
+          break;
+        }
+        case 6:
+        {
+          HashSet<(string name, string emoji)> signs = new HashSet<(string, string)>(Model.List.Select(p => p.ChineseZodiacSign));
+          foreach (var (name, emoji) in signs)
+          {
+            <a class="dropdown-item" data-toggle="apply-options-filter-person-list" href="#">@($"{name} {emoji}")</a>
+          }
+          break;
+        }
+        case 7:
+        {
+          HashSet<(string name, string emoji)> signs = new HashSet<(string, string)>(Model.List.Select(p => p.WesternZodiacSign));
+          foreach (var (name, emoji) in signs)
+          {
+            <a class="dropdown-item" data-toggle="apply-options-filter-person-list" href="#">@($"{name} {emoji}")</a>
+          }
+          break;
+        }
+      }
+    }
+  </span>
+</span>
