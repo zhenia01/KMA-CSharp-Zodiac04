@@ -5,7 +5,7 @@ using BorodaikevychZodiac.Exceptions;
 
 namespace BorodaikevychZodiac.Entities
 {
-  public class Person
+  internal class Person
   {
     public Person(string firstName, string lastName, string email, DateTime birthDate = default)
     {

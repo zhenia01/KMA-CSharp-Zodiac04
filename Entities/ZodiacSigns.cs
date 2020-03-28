@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace BorodaikevychZodiac.Entities
 {
-  public static class ZodiacSigns
+  internal static class ZodiacSigns
   {
     public static Task<(string name, string emoji)> ChineseSign(DateTime birth)
     {

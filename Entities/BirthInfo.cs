@@ -4,11 +4,9 @@ using BorodaikevychZodiac.Exceptions;
 
 namespace BorodaikevychZodiac.Entities
 {
-  public class BirthInfo
+  internal class BirthInfo
   {
-    private DateTime _birthDate;
-
-    public DateTime BirthDate => _birthDate;
+    public DateTime BirthDate { get; private set; }
 
     public async Task SetBirthDateAsync(DateTime birthDate)
     {
@@ -18,8 +16,8 @@ namespace BorodaikevychZodiac.Entities
       if (age < 0) throw new TooEarlyBirthDateException();
       if (age > 135) throw new FutureBirthDateException();
 
-      _birthDate = birthDate;
-      IsBornToday = _birthDate.Day == today.Day && _birthDate.Month == today.Month;
+      BirthDate = birthDate;
+      IsBornToday = BirthDate.Day == today.Day && BirthDate.Month == today.Month;
       Age = age;
     }
 

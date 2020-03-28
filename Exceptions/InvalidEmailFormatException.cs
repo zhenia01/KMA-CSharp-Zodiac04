@@ -2,7 +2,7 @@
 
 namespace BorodaikevychZodiac.Exceptions
 {
-  public class InvalidEmailFormatException : FormatException
+  internal class InvalidEmailFormatException : FormatException
   {
     public InvalidEmailFormatException(string message) : base(message)
     {
